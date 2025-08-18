@@ -50,4 +50,24 @@ public class CitaController {
         citaService.eliminarCita(id);
         return ResponseEntity.noContent().build();
     }
+
+    //Manejo de estados
+    @PutMapping("/{id}/confirmar")
+    public ResponseEntity<CitaDTO> confirmar(@PathVariable Long id) {
+        return ResponseEntity.ok(citaService.confirmarCita(id));
+    }
+
+    @PutMapping("/{id}/cancelar")
+    public ResponseEntity<CitaDTO> cancelar(@PathVariable Long id) {
+        return ResponseEntity.ok(citaService.cancelarCita(id));
+    }
+
+    @PutMapping("/{id}/finalizar")
+    public ResponseEntity<CitaDTO> finalizar(@PathVariable Long id) {
+        return ResponseEntity.ok(citaService.finalizarCita(id));
+    }
+
+
+
+
 }

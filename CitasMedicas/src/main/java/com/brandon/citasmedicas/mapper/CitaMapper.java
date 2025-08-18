@@ -35,7 +35,11 @@ public class CitaMapper {
         Cita cita = new Cita();
         cita.setId(dto.getId());
         cita.setFechaHora( dto.getFechaHora());
-        cita.setEstado(dto.getEstado());
+
+        if (dto.getEstado() != null){
+            cita.setEstado(dto.getEstado());
+        }
+
         cita.setPaciente(paciente);
         cita.setDoctor(doctor);
         cita.setHospital(hospital);

@@ -19,7 +19,7 @@ public class Cita {
     private LocalDateTime fechaHora;
 
     @Enumerated(EnumType.STRING)
-    private EstadoCita estado;
+    private EstadoCita estado = EstadoCita.PENDIENTE;
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")

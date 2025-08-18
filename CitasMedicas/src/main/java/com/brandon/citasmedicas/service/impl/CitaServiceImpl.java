@@ -6,6 +6,7 @@ import com.brandon.citasmedicas.model.Cita;
 import com.brandon.citasmedicas.model.Doctor;
 import com.brandon.citasmedicas.model.Hospital;
 import com.brandon.citasmedicas.model.Paciente;
+import com.brandon.citasmedicas.model.enums.EstadoCita;
 import com.brandon.citasmedicas.repository.CitaRepository;
 import com.brandon.citasmedicas.repository.DoctorRepository;
 import com.brandon.citasmedicas.repository.HospitalRepository;
@@ -103,6 +104,49 @@ public class CitaServiceImpl implements CitaService {
         return citas.stream()
                 .map(CitaMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    //Manejo de estados
+    @Override
+    public CitaDTO confirmarCita(Long id){
+        Cita cita = obtenerCita(id);
+
+        if (cita.getEstado() != EstadoCita.PENDIENTE) {
+            throw new IllegalStateException("Solo se pueden confirmar citas pendientes");
+        }
+
+        cita.setEstado(EstadoCita.CONFIRMADA);
+        return CitaMapper.toDTO(citaRepository.save(cita));
+    }
+
+    @Override
+    public CitaDTO cancelarCita(Long id){
+        Cita cita = obtenerCita(id);
+
+        if (cita.getEstado() == EstadoCita.FINALIZADA) {
+            throw new IllegalStateException("No se pueden cancelar citas finalizadas");
+        }
+
+        cita.setEstado(EstadoCita.CANCELADA);
+        return CitaMapper.toDTO(citaRepository.save(cita));
+    }
+
+    @Override
+    public CitaDTO finalizarCita(Long id){
+        Cita cita = obtenerCita(id);
+
+        if (cita.getEstado() != EstadoCita.CONFIRMADA) {
+            throw new IllegalStateException("Solo se pueden finalizar citas confirmadas");
+        }
+
+        cita.setEstado(EstadoCita.FINALIZADA);
+        return CitaMapper.toDTO(citaRepository.save(cita));
+    }
+
+
+    private Cita obtenerCita(Long id) {
+        return citaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cita no encontrada"));
     }
 
 
